@@ -1,9 +1,15 @@
 import "./App.css";
+import { Canvas } from "@react-three/fiber";
 
 function App() {
   return (
     <>
-      <h1>R3F ROOM</h1>
+      <Canvas>
+        <mesh>
+          <torusKnotGeometry />
+          <meshNormalMaterial />
+        </mesh>
+      </Canvas>
     </>
   );
 }
