@@ -8,7 +8,7 @@ export default function Room() {
         rotation-x={-Math.PI * 0.5}
         scale={10}
       >
-        <planeGeometry />
+        <planeGeometry args={[1000, 1000]} />
         <meshStandardMaterial color="#FFB46B" />
       </mesh>
     </>
