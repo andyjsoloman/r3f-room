@@ -1,4 +1,4 @@
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, PointerLockControls } from "@react-three/drei";
 import { Physics, RigidBody } from "@react-three/rapier";
 
 import Room from "./Room";
@@ -9,8 +9,8 @@ import Self from "./Self";
 export default function Experience() {
   return (
     <>
-      <OrbitControls />
       <Physics debug>
+        <PointerLockControls />
         <mesh castShadow position={[0, 5, -20]}>
           <torusKnotGeometry />
           <meshNormalMaterial />

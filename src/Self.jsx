@@ -2,6 +2,7 @@ import { useRapier, RigidBody } from "@react-three/rapier";
 import { useFrame } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
 import { useRef, useEffect } from "react";
+import * as THREE from "three";
 
 export default function Self() {
   const body = useRef();
@@ -37,6 +38,9 @@ export default function Self() {
   }, []);
 
   useFrame((state, delta) => {
+    /**
+     * Controls
+     */
     const { forward, backward, leftward, rightward } = getKeys();
 
     const impulse = { x: 0, y: 0, z: 0 };
@@ -57,6 +61,18 @@ export default function Self() {
     }
 
     body.current.applyImpulse(impulse);
+
+    /**
+     * Camera
+     */
+
+    const bodyPosition = body.current.translation();
+
+    const cameraPosition = new THREE.Vector3();
+    cameraPosition.copy(bodyPosition);
+    cameraPosition.y += 2;
+
+    state.camera.position.copy(cameraPosition);
   });
 
   return (
