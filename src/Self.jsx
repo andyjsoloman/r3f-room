@@ -1,5 +1,5 @@
 import { useRapier, RigidBody } from "@react-three/rapier";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
 import { useRef, useEffect } from "react";
 import * as THREE from "three";
@@ -10,6 +10,7 @@ export default function Self() {
   const { rapier, world } = useRapier();
   const rapierWorld = world;
   console.log("Hey");
+  const { camera } = useThree();
 
   const jump = () => {
     const origin = body.current.translation();
@@ -43,6 +44,18 @@ export default function Self() {
      */
     const { forward, backward, leftward, rightward } = getKeys();
 
+    // Calculate camera direction vectors
+    const cameraDirection = new THREE.Vector3();
+    camera.getWorldDirection(cameraDirection);
+    cameraDirection.y = 0;
+    cameraDirection.normalize();
+
+    const cameraSideVector = new THREE.Vector3();
+    camera.getWorldDirection(cameraSideVector);
+    cameraSideVector.y = 0;
+    cameraSideVector.normalize();
+    cameraSideVector.cross(camera.up);
+
     const impulse = { x: 0, y: 0, z: 0 };
 
     const impulseStrength = 100 * delta;
@@ -59,6 +72,13 @@ export default function Self() {
     if (rightward) {
       impulse.x += impulseStrength;
     }
+
+    // Align the impulse with the camera direction
+    const alignedImpulse = new THREE.Vector3(impulse.x, impulse.y, impulse.z);
+    alignedImpulse.applyEuler(camera.rotation);
+    impulse.x = alignedImpulse.x;
+    impulse.y = alignedImpulse.y;
+    impulse.z = alignedImpulse.z;
 
     body.current.applyImpulse(impulse);
 
