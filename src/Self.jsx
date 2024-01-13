@@ -1,7 +1,8 @@
+/* eslint-disable react/no-unknown-property */
 import { useRapier, RigidBody } from "@react-three/rapier";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 
 export default function Self() {
@@ -9,7 +10,9 @@ export default function Self() {
   const [subscribeKeys, getKeys] = useKeyboardControls();
   const { rapier, world } = useRapier();
   const rapierWorld = world;
-  console.log("Hey");
+
+  const [smoothedCameraPosition] = useState(() => new THREE.Vector3());
+
   const { camera } = useThree();
 
   const jump = () => {
@@ -56,10 +59,9 @@ export default function Self() {
     cameraSideVector.normalize();
     cameraSideVector.cross(camera.up);
 
+    //Apply keyboard inputs to movement impulse value
     const impulse = { x: 0, y: 0, z: 0 };
-
     const impulseStrength = 100 * delta;
-
     if (forward) {
       impulse.z -= impulseStrength;
     }
@@ -92,7 +94,9 @@ export default function Self() {
     cameraPosition.copy(bodyPosition);
     cameraPosition.y += 2;
 
-    state.camera.position.copy(cameraPosition);
+    smoothedCameraPosition.lerp(cameraPosition, 0.1);
+
+    state.camera.position.copy(smoothedCameraPosition);
   });
 
   return (

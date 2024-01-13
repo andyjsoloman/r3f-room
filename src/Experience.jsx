@@ -1,4 +1,5 @@
-import { OrbitControls, PointerLockControls } from "@react-three/drei";
+/* eslint-disable react/no-unknown-property */
+import { PointerLockControls } from "@react-three/drei";
 import { Physics, RigidBody } from "@react-three/rapier";
 
 import Room from "./Room";
