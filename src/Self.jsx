@@ -13,7 +13,7 @@ export default function Self() {
 
   const { camera } = useThree();
 
-  const jump = () => {
+  const jump = (delta) => {
     const origin = body.current.translation();
     origin.y -= 1.01;
     const direction = { x: 0, y: -1, z: 0 };
@@ -59,7 +59,7 @@ export default function Self() {
 
     //Apply keyboard inputs to movement impulse value
     const impulse = { x: 0, y: 0, z: 0 };
-    const impulseStrength = 200 * delta;
+    const impulseStrength = 100 * delta;
     if (forward) {
       impulse.z -= impulseStrength;
     }
@@ -101,7 +101,7 @@ export default function Self() {
 
     const cameraPosition = new THREE.Vector3();
     cameraPosition.copy(bodyPosition);
-    cameraPosition.y += 2;
+    cameraPosition.y += 4;
 
     state.camera.position.copy(cameraPosition);
   });
