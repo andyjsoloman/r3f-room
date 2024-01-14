@@ -2,7 +2,7 @@
 import { useRapier, RigidBody } from "@react-three/rapier";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import * as THREE from "three";
 
 export default function Self() {
@@ -10,8 +10,6 @@ export default function Self() {
   const [subscribeKeys, getKeys] = useKeyboardControls();
   const { rapier, world } = useRapier();
   const rapierWorld = world;
-
-  const [smoothedCameraPosition] = useState(() => new THREE.Vector3());
 
   const { camera } = useThree();
 
@@ -24,7 +22,7 @@ export default function Self() {
 
     console.log(hit.toi);
     if (hit.toi < 2 && hit.toi > 0)
-      body.current.applyImpulse({ x: 0, y: 40, z: 0 });
+      body.current.applyImpulse({ x: 0, y: 20, z: 0 });
 
     //the castRay parameters do not seem to register the imported model as solid, so registers on the bottom of the floor when ball is touching ground, and top of floor when above ground. The different thicknesses of the floor (as in centre pool area) make it difficult to fine tune a hit.toi number to allow jumping. Either need to figure out why gltf is not registered as solid or make floor all same thickness
   };
@@ -61,7 +59,7 @@ export default function Self() {
 
     //Apply keyboard inputs to movement impulse value
     const impulse = { x: 0, y: 0, z: 0 };
-    const impulseStrength = 100 * delta;
+    const impulseStrength = 200 * delta;
     if (forward) {
       impulse.z -= impulseStrength;
     }
@@ -82,7 +80,18 @@ export default function Self() {
     impulse.y = alignedImpulse.y;
     impulse.z = alignedImpulse.z;
 
-    body.current.applyImpulse(impulse);
+    if (forward || backward || leftward || rightward) {
+      body.current.applyImpulse(impulse);
+    } else {
+      // Damping: gradually slow down the sphere when no keys are pressed
+      const dampingFactor = 0.9;
+      const linearVelocity = body.current.linvel();
+      body.current.setLinvel({
+        x: linearVelocity.x * dampingFactor,
+        y: linearVelocity.y,
+        z: linearVelocity.z * dampingFactor,
+      });
+    }
 
     /**
      * Camera
@@ -94,14 +103,17 @@ export default function Self() {
     cameraPosition.copy(bodyPosition);
     cameraPosition.y += 2;
 
-    smoothedCameraPosition.lerp(cameraPosition, 0.1);
-
-    state.camera.position.copy(smoothedCameraPosition);
+    state.camera.position.copy(cameraPosition);
   });
 
   return (
     <>
-      <RigidBody ref={body} canSleep={false}>
+      <RigidBody
+        colliders="ball"
+        ref={body}
+        canSleep={false}
+        enabledRotations={[false, false, false]}
+      >
         <mesh castShadow>
           <sphereGeometry args={[1, 24]} />
           <meshStandardMaterial color="coral" />
@@ -110,3 +122,8 @@ export default function Self() {
     </>
   );
 }
+/**
+ * try changing rigidbody mesh to sphere instead of basic cube
+ * velocity as a function of state - whether a key is cuurently being pressed
+ * somehow halt momentum on handleKeyUp
+ */

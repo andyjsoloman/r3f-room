@@ -2,7 +2,6 @@
 import { PointerLockControls } from "@react-three/drei";
 import { Physics, RigidBody } from "@react-three/rapier";
 
-import Room from "./Room";
 import Lights from "./Lights";
 import Model from "./Model";
 import Self from "./Self";
