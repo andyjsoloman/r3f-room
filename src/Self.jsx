@@ -13,7 +13,7 @@ export default function Self() {
 
   const { camera } = useThree();
 
-  const jump = (delta) => {
+  const jump = () => {
     const origin = body.current.translation();
     origin.y -= 1.01;
     const direction = { x: 0, y: -1, z: 0 };
@@ -77,7 +77,7 @@ export default function Self() {
     const alignedImpulse = new THREE.Vector3(impulse.x, impulse.y, impulse.z);
     alignedImpulse.applyEuler(camera.rotation);
     impulse.x = alignedImpulse.x;
-    impulse.y = alignedImpulse.y;
+    impulse.y = 0;
     impulse.z = alignedImpulse.z;
 
     if (forward || backward || leftward || rightward) {
@@ -122,8 +122,3 @@ export default function Self() {
     </>
   );
 }
-/**
- * try changing rigidbody mesh to sphere instead of basic cube
- * velocity as a function of state - whether a key is cuurently being pressed
- * somehow halt momentum on handleKeyUp
- */

@@ -2,7 +2,7 @@
 import { useGLTF } from "@react-three/drei";
 
 export default function Model() {
-  const model = useGLTF("src/assets/room.gltf");
+  const model = useGLTF("src/assets/roomtextured2k.gltf");
 
   return (
     <primitive

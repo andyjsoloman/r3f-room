@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { PointerLockControls } from "@react-three/drei";
+import { PointerLockControls, Sky } from "@react-three/drei";
 import { Physics, RigidBody } from "@react-three/rapier";
 
 import Lights from "./Lights";
@@ -9,7 +9,7 @@ import Self from "./Self";
 export default function Experience() {
   return (
     <>
-      <Physics debug>
+      <Physics>
         <PointerLockControls />
         <mesh castShadow position={[0, 5, -20]}>
           <torusKnotGeometry />
@@ -20,6 +20,7 @@ export default function Experience() {
           <Model />
         </RigidBody>
         <Lights />
+        <Sky />
         <Self />
       </Physics>
     </>
