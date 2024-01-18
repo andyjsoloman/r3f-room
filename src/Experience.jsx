@@ -5,7 +5,7 @@ import { Physics, RigidBody } from "@react-three/rapier";
 import Lights from "./Lights";
 import Model from "./Model";
 import Self from "./Self";
-
+import Room2 from "./Room2";
 export default function Experience() {
   return (
     <>
@@ -17,7 +17,7 @@ export default function Experience() {
         </mesh>
 
         <RigidBody colliders="trimesh" type="fixed">
-          <Model />
+          <Room2 />
         </RigidBody>
         <Lights />
         <Sky />
