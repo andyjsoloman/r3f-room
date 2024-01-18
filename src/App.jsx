@@ -2,6 +2,7 @@ import "./App.css";
 import { Canvas } from "@react-three/fiber";
 import Experience from "./Experience";
 import { KeyboardControls } from "@react-three/drei";
+import { Suspense } from "react";
 
 function App() {
   return (
@@ -14,9 +15,11 @@ function App() {
         { name: "jump", keys: ["Space"] },
       ]}
     >
-      <Canvas>
-        <Experience />
-      </Canvas>
+      <Suspense fallback={<span>loading...</span>}>
+        <Canvas>
+          <Experience />
+        </Canvas>
+      </Suspense>
     </KeyboardControls>
   );
 }
