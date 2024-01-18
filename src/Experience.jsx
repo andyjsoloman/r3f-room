@@ -6,6 +6,8 @@ import Lights from "./Lights";
 import Model from "./Model";
 import Self from "./Self";
 import Room2 from "./Room2";
+import Video from "./Video";
+
 export default function Experience() {
   return (
     <>
@@ -17,10 +19,11 @@ export default function Experience() {
         </mesh>
 
         <RigidBody colliders="trimesh" type="fixed">
-          <Room2 />
+          <Model />
         </RigidBody>
+        <Video />
         <Lights />
-        <Sky />
+
         <Self />
       </Physics>
     </>

@@ -4,16 +4,15 @@ Command: npx gltfjsx@6.2.16 roomsplit.gltf
 */
 
 import React, { useRef } from "react";
-import { useGLTF, MeshReflectorMaterial } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 
 export default function Room2(props) {
   const { nodes, materials } = useGLTF("/roomsplit.gltf");
   return (
     <group {...props} dispose={null} scale={2} position={[0, -9, -20]}>
-      <mesh
-        geometry={nodes.room_v1.geometry}
-        material={materials["Material.001"]}
-      />
+      <mesh geometry={nodes.room_v1.geometry}>
+        <meshPhysicalMaterial color="#C1B7FF" />
+      </mesh>
       <mesh
         geometry={nodes.room_v1001.geometry}
         material={materials["Material.001"]}
