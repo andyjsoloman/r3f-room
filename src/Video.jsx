@@ -3,11 +3,15 @@ import { forwardRef, useState, useEffect } from "react";
 
 import { EffectComposer, GodRays, Bloom } from "@react-three/postprocessing";
 
-export default function Video() {
+export default function Video(props) {
   return (
     <>
       {/** The screen uses postpro godrays */}
-      <Screen />
+      <Screen
+        position={props.position}
+        src={props.src}
+        rotation={props.rotation}
+      />
       {/** The sphere reflects the screen with a cube-cam */}
 
       {/** The floor uses drei/MeshReflectorMaterial */}
@@ -18,7 +22,7 @@ export default function Video() {
 const Emitter = forwardRef((props, forwardRef) => {
   const [video] = useState(() =>
     Object.assign(document.createElement("video"), {
-      src: "/bluewater.mp4",
+      src: props.src,
       crossOrigin: "Anonymous",
       loop: true,
       muted: true,
@@ -26,8 +30,8 @@ const Emitter = forwardRef((props, forwardRef) => {
   );
   useEffect(() => void video.play(), [video]);
   return (
-    <mesh ref={forwardRef} position={[0, 1, -90.75]} {...props}>
-      <planeGeometry args={[24, 12]} />
+    <mesh ref={forwardRef} {...props}>
+      <planeGeometry args={[24, 12]} position={props.position} />
       <meshBasicMaterial>
         <videoTexture
           attach="map"
@@ -43,11 +47,16 @@ const Emitter = forwardRef((props, forwardRef) => {
   );
 });
 
-function Screen() {
+function Screen(props) {
   const [material, set] = useState();
   return (
     <>
-      <Emitter ref={set} />
+      <Emitter
+        ref={set}
+        position={props.position}
+        src={props.src}
+        rotation={props.rotation}
+      />
       {material && (
         <EffectComposer disableNormalPass multisampling={8}>
           <GodRays sun={material} exposure={0.34} decay={0.8} blur />
